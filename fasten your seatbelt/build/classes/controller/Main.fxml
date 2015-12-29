@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="580.0" prefWidth="660.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="controller.MainController">
+  <children>
+    <Pane id="mainPain" layoutX="0.0" layoutY="0.0" maxHeight="1.7976931348623157E308" maxWidth="0.0" prefHeight="580.0" prefWidth="132.0">
+      <children>
+        <Button fx:id="users" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onUsers" prefWidth="108.0" text="Users" />
+      </children>
+    </Pane>
+    <Pane fx:id="mainPain" layoutX="144.0" layoutY="0.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="580.0" prefWidth="507.0" />
+  </children>
+</AnchorPane>
