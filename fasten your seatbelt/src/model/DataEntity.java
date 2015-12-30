@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.Utils;
 
 /**
  *
@@ -42,7 +43,7 @@ public abstract class DataEntity implements Tabel {
     public Connection getConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "janjan12");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "root");
             return conn;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,13 +84,14 @@ public abstract class DataEntity implements Tabel {
     public void load() {
         try {
             Connection conn = getConnection();
-            Statement statement = conn.createStatement();
             Field idField = getIdField();
             PreparedStatement pstmt = conn.prepareStatement("select * from " + getTable()
                     + " where " + idField.getName() + " = " + idField.getLong(this));
             System.out.println("sql query " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
-
+            if (!rs.next()){
+                getNew();
+            }
             // Laad velden via annotatie
             Class cls = getClass();
             for (Field field : cls.getDeclaredFields()) {
@@ -174,5 +176,94 @@ public abstract class DataEntity implements Tabel {
         }
         // throw RuntimeException("No ID Field");
         return null;
+    }
+    
+    
+    public void save(){
+        try {
+            
+            Connection conn = getConnection();
+            Statement statement = conn.createStatement();
+            Field idField = getIdField();
+            PreparedStatement pstmt ;
+  
+            String updateString = "";  // Make update String
+            String insertField = "";  // Make insert fields String
+            String insertQuestionMark = "";  // Make insert Questionmark String
+           
+            
+            // Laad velden via annotatie
+            // Eerst veld specifieke 
+            Class cls = getClass();
+            for (Field field : cls.getDeclaredFields()) {
+                for (Annotation anno : field.getAnnotations()) {
+                    if (anno instanceof Column) {
+                         Column col = (Column) anno;
+                        DataType dt = col.dataType();
+                        switch (dt) {
+                            case ID:
+                               
+                                break;
+                            default:
+                                updateString = Utils.glue(updateString , field.getName()+" = ? "," , ");
+                                insertField  = Utils.glue(insertField , field.getName()," , ");
+                                insertQuestionMark= Utils.glue(insertQuestionMark , " ? ",",");
+                        }
+                    }
+                }
+            }
+
+            int key = idField.getInt(this);
+            if (key == -1){         // Insert
+                pstmt = conn.prepareStatement("insert into " + getTable()
+                    + " ( " + insertField + " ) values ( " + insertQuestionMark +" )");
+            } else {
+                pstmt = conn.prepareStatement("update " + getTable()
+                    +" set " + updateString +" where " + idField.getName() + " = " + idField.getLong(this));
+            }
+       
+            System.out.println("sql query 1 " + pstmt.toString());
+            // Laad velden via annotatie
+            // Eerst veld specifieke 
+            int counter = 0;
+            
+            for (Field field : cls.getDeclaredFields()) {
+                for (Annotation anno : field.getAnnotations()) {
+                    if (anno instanceof Column) {
+                        counter += 1;
+                        Column col = (Column) anno;
+                        DataType dt = col.dataType();
+                        switch (dt) {
+                            case ID:
+                                counter -= 1;   // Id doet niet mee wordt niet geupdate
+                                break;
+                            case STRING:
+                                pstmt.setString(counter, field.get(this).toString());
+                                break;
+                            case INT:
+                                pstmt.setInt(counter, field.getInt(this));
+                                break;
+                            case DATETIME:
+                                Calendar cal = (Calendar) field.get(this);
+                                
+                                pstmt.setLong(counter, cal.getTimeInMillis());
+                                break;
+                        }
+                    }
+                }
+            }
+            System.out.println("sql query " + pstmt.toString());
+            pstmt.executeUpdate();
+    
+
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
 }

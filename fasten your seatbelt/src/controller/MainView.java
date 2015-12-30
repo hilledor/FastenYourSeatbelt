@@ -43,7 +43,7 @@ public class MainView extends Application {
 
     private boolean fillDataBaseIfEmpty() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/fys2", "root", "janjan12");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/fys2", "root", "root");
 
         // Check table user via select
         PreparedStatement pstmt = connection.prepareStatement("select * from user limit 1");

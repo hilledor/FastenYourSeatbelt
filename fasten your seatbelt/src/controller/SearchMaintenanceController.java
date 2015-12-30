@@ -8,6 +8,7 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,14 +26,16 @@ import model.User;
  *
  * @author jandorresteijn
  */
-public abstract class SearchMaintenanceController extends  Application{
-       // Standard FXML
+public abstract class SearchMaintenanceController extends  Application implements SearchMaintenanceInterface{
+
+    // Standard FXML
     @FXML
     TableView<User> grid;
 
  
     public void doGridSelect(TableRow row) {}
 
+    
     
     public void defaultSearchMaintenanceInit() {
         grid.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -52,12 +55,16 @@ public abstract class SearchMaintenanceController extends  Application{
             }
         });
         
+        newItem(null);
         
     }
 
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 
 }

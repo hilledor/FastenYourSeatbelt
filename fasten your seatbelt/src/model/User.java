@@ -9,21 +9,74 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class User extends DataEntity implements Tabel {
 
-    @Column(dataType = DataType.ID)
-    private int id;
-    @Column(dataType = DataType.STRING)
-    private String firstname;
-    @Column(dataType = DataType.STRING)
-    private String middlename;
-    @Column(dataType = DataType.STRING)
-    private String lastname;
-    @Column(dataType = DataType.STRING)
-    private String email;
-    @Column(dataType = DataType.INT)
-    private int rol;
-    @Column(dataType = DataType.STRING)
-    private String password;
+ 
+    	public enum Rol  {
+		
+		ADMIN(1, "Administrator"),
+		MANAGER(2, "Manager"),
+		EMPLOYEE(3, "Employee");
+		
+		private final int id;
+		
+		private final String description;
+		
+		Rol(int id, String description) {
+			this.id = id;
+			this.description = description;
+		}
+		
+		
+		public Integer getId() {
+			return id;
+		}
+		
+		public String getDescription() {
+			return description;
+		}
+	
+		public Rol getRol(String description) {
+			Rol[] rols = values();
+			for (Rol rol : rols) {
+				if(rol.description == description){
+					return rol;
+				}
+			}
+			return null;
+		}
+                
+                public static Rol getRol(int id) {
+			Rol[] rols = values();
+			for (Rol rol : rols) {
+				if(rol.id == id){
+					return rol;
+				}
+			}
+			return null;
+		}
+	}
 
+    
+    
+    
+    @Column(dataType = DataType.ID)
+    public int id;
+    @Column(dataType = DataType.STRING)
+    public String firstname;
+    @Column(dataType = DataType.STRING)
+    public String middlename;
+    @Column(dataType = DataType.STRING)
+    public String lastname;
+    @Column(dataType = DataType.STRING)
+    public String email;
+    @Column(dataType = DataType.INT)
+    public int rol;
+    @Column(dataType = DataType.STRING)
+    public String password;
+    @Column(dataType = DataType.INT)
+    public int inactive;
+    
+    
+    
     public User() {
 
     }
@@ -94,12 +147,23 @@ public class User extends DataEntity implements Tabel {
     public void setRol(int rol) {
         this.rol = rol;
     }
+    
+    
+    
+    public int getInactive() {
+        return inactive;
+    }
+
+    
+    public void setInactive(int inactive) {
+        this.inactive = inactive;
+    }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword() {
+    public void setPassword(String password) {
         this.password = password;
     }
 

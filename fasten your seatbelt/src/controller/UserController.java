@@ -5,7 +5,6 @@
  */
 package controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,16 +16,13 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -113,6 +109,9 @@ public class UserController extends SearchMaintenanceController implements Initi
     @FXML
     PasswordField passwordField;
 
+    User activeUser;
+    
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
@@ -154,6 +153,16 @@ public class UserController extends SearchMaintenanceController implements Initi
                     @Override
                     public void handle(MouseEvent event) {
                         System.out.println("in save");
+                        
+                        
+                           
+                        activeUser.setFirstname(firstnameField.getText());
+                        activeUser.setMiddlename(middlenameField.getText());
+                        activeUser.setLastname(lastnameField.getText());
+                        activeUser.setEmail(emailField.getText());
+                        activeUser.setRol((int) rolField.getValue());
+                        activeUser.setPassword(passwordField.getText());
+                        activeUser.save();
                         /*
                          try {
                 
@@ -191,7 +200,7 @@ public class UserController extends SearchMaintenanceController implements Initi
 
         ObservableList<User> list = FXCollections.observableArrayList();
         Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "janjan12");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "root");
         Statement statement = connection.createStatement();
 
         PreparedStatement pstmt = connection.prepareStatement("select * from user order by lastname");
@@ -208,8 +217,7 @@ public class UserController extends SearchMaintenanceController implements Initi
                     rs.getInt("rol"),
                     rs.getString("password"));
             list.add(user);
-            System.out.println("rol = " + rs.getString("rol"));
-
+     
         }
         return list;
 
@@ -217,17 +225,20 @@ public class UserController extends SearchMaintenanceController implements Initi
 
     public void doGridSelect(TableRow row) {
         User user = (User) row.getItem();
+        user.load(); // Extra laden inactive veld is niet in het grid
         fillFields(user);
         // delete.setDisable(false);
 
     }
 
     public void newItem(ActionEvent event) {
-        User user = new User(-1, "", "", "", "", 3, "");
+        User user = new User();
+        user.getNew();
         fillFields(user);
     }
 
     public void fillFields(User user) {
+        activeUser = user;
         if (user.getId() < 0) {
             idField.setText("New");
         } else {
