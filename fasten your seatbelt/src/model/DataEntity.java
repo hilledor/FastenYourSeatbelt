@@ -40,7 +40,7 @@ public abstract class DataEntity implements Tabel {
         DataType dataType();
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "root");
@@ -66,6 +66,8 @@ public abstract class DataEntity implements Tabel {
             Field idField = getIdField();
             PreparedStatement pstmt = conn.prepareStatement("delete from " + getTable()
                     + " where " + idField.getName() + " = " + idField.getLong(this));
+            System.out.println("sql query " + pstmt.toString());
+            pstmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {

@@ -12,7 +12,7 @@ public class User extends DataEntity implements Tabel {
  
     	public enum Rol  {
 		
-		ADMIN(1, "Administrator"),
+		ADMIN(1, "Admin"),
 		MANAGER(2, "Manager"),
 		EMPLOYEE(3, "Employee");
 		
@@ -26,7 +26,7 @@ public class User extends DataEntity implements Tabel {
 		}
 		
 		
-		public Integer getId() {
+		public int getId() {
 			return id;
 		}
 		
@@ -34,10 +34,11 @@ public class User extends DataEntity implements Tabel {
 			return description;
 		}
 	
-		public Rol getRol(String description) {
+		public static Rol getRol(String description) {
+                    System.out.println("description "+description);
 			Rol[] rols = values();
 			for (Rol rol : rols) {
-				if(rol.description == description){
+				if(rol.description.equals(description)){
 					return rol;
 				}
 			}
@@ -51,7 +52,7 @@ public class User extends DataEntity implements Tabel {
 					return rol;
 				}
 			}
-			return null;
+			return getRol(1);
 		}
 	}
 
@@ -136,12 +137,7 @@ public class User extends DataEntity implements Tabel {
     }
 
     public String getRolDisplay() {
-        if (rol == 1) {
-            return "Admin";
-        } else if (rol == 2) {
-            return "manager";
-        }
-        return "medewerker";
+        return Rol.getRol(getRol()).getDescription();
     }
 
     public void setRol(int rol) {
@@ -216,6 +212,12 @@ public class User extends DataEntity implements Tabel {
         }
     }
 
+    
+    public void getNew() {
+        super.getNew();
+        setRol(3);
+    }
+    
     @Override
     public String getTable() {
         return "user";

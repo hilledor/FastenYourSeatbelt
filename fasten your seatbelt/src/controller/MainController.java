@@ -16,6 +16,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import model.User;
@@ -27,21 +29,52 @@ import model.User;
  */
 public class MainController implements Initializable {
 
+    
+    
     @FXML
     Button users;
             
     @FXML
     Pane mainPain;
+    
+    @FXML
+    Button login;
             
+    
+    @FXML
+    TextField user;
+    
+    @FXML
+    TextField password;
+    
+    @FXML
+    SplitPane splitPane;
+    
+    @FXML
+    Pane loginPane;
+    
     public void onUsers(ActionEvent event){
         try {
             AnchorPane userScr  = (AnchorPane) FXMLLoader.load(UserController.class.getResource("User.fxml"));
-            //Scene scene = new Scene(page);
+            //Opruimnen oude objecten weet niet of dit de manier is
+            mainPain.getChildren().removeAll(mainPain.getChildren());
             mainPain.getChildren().setAll(userScr);
+            AnchorPane.setTopAnchor(userScr, 0.0);
+            AnchorPane.setLeftAnchor(userScr, 0.0);
+            AnchorPane.setRightAnchor(userScr, 0.0);
+            AnchorPane.setBottomAnchor(userScr, 0.0);
+            
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
      }
+    
+    public void onLogin(ActionEvent event){
+        System.out.println("in login");
+        loginPane.setVisible(false);
+        splitPane.setVisible(true);
+     }
+  
     
     
     /**

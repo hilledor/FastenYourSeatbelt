@@ -2,6 +2,22 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/model/Tabel.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/controller/MainView.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/controller/UserController.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/controller/SearchMaintenanceInterface.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/controller/MainController.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/utils/Utils.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/nbproject/project.xml</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/controller/SearchMaintenanceController.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/model/DataEntity.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/nbproject/build-impl.xml</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/nbproject/project.properties</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/model/User.java</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/nbproject/jfx-impl.xml</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/controller/User.fxml</file>
+            <file>file:/Users/jdor/NetBeansProjects/FastenYourSeatbelt/fasten%20your%20seatbelt/src/controller/Main.fxml</file>
+        </group>
     </open-files>
 </project-private>

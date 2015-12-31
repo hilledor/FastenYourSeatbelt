@@ -36,7 +36,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import model.DataEntity;
 import model.User;
+import model.User.Rol;
+import utils.Utils;
 
 /**
  * FXML Controller class
@@ -68,6 +71,10 @@ public class UserController extends SearchMaintenanceController implements Initi
     Button deleteBut;
 
     @FXML
+    Button logBut;
+
+    
+    @FXML
     TableView<User> grid;
 
     @FXML
@@ -86,7 +93,7 @@ public class UserController extends SearchMaintenanceController implements Initi
     TableColumn<User, String> emailCol;
 
     @FXML
-    TableColumn<User, Integer> rolCol;
+    TableColumn<User, String> rolCol;
 
     @FXML
     TextField idField;
@@ -110,8 +117,10 @@ public class UserController extends SearchMaintenanceController implements Initi
     PasswordField passwordField;
 
     User activeUser;
-    
-    
+
+    @FXML
+    ComboBox rolSearch;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
@@ -138,7 +147,7 @@ public class UserController extends SearchMaintenanceController implements Initi
         middlenameCol.setCellValueFactory(new PropertyValueFactory<User, String>("middlename"));
         lastnameCol.setCellValueFactory(new PropertyValueFactory<User, String>("lastname"));
         emailCol.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-        rolCol.setCellValueFactory(new PropertyValueFactory<User, Integer>("rolDisplay"));
+        rolCol.setCellValueFactory(new PropertyValueFactory<User, String>("rolDisplay"));
 
         try {
             grid.setItems(getUsers());
@@ -153,45 +162,18 @@ public class UserController extends SearchMaintenanceController implements Initi
                     @Override
                     public void handle(MouseEvent event) {
                         System.out.println("in save");
-                        
-                        
-                           
                         activeUser.setFirstname(firstnameField.getText());
                         activeUser.setMiddlename(middlenameField.getText());
                         activeUser.setLastname(lastnameField.getText());
                         activeUser.setEmail(emailField.getText());
-                        activeUser.setRol((int) rolField.getValue());
+                        activeUser.setRol(Rol.getRol(rolField.getValue().toString()).getId());
                         activeUser.setPassword(passwordField.getText());
                         activeUser.save();
-                        /*
-                         try {
-                
-                         selectedUser.setVoorNaam(voornaamTextField.getText());
-
-                         selectedUser.setTussenVoeg(tussenTextField.getText());
-
-                         selectedUser.setAchterNaam(achternaamTextField.getText());
-
-                         selectedUser.setEmail(usernameTextField.getText());
-
-                         selectedUser.setRol("" + rolComboField.getValue());
-                         System.out.println("rolComboField.getText() " + rolComboField.getValue());
-                         selectedUser.setWachtWoord(passwordTextField.getText());
-                         System.out.println("passwordTextField.getText() " + passwordTextField.getText());
-
-                         selectedUser.save();
-
-                         table.setItems(getUsers());
-                         setNewUser();
-
-                         } catch (ClassNotFoundException ex) {
-                         Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                         } catch (SQLException ex) {
-                         Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                         }
-                         */
+                        newItem(null);
+                        fillGrid(null);
                     }
-                });
+                }
+        );
 
         defaultSearchMaintenanceInit();
     }
@@ -199,11 +181,15 @@ public class UserController extends SearchMaintenanceController implements Initi
     private ObservableList<User> getUsers() throws ClassNotFoundException, SQLException {
 
         ObservableList<User> list = FXCollections.observableArrayList();
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "root");
+        Connection connection = DataEntity.getConnection();
         Statement statement = connection.createStatement();
 
-        PreparedStatement pstmt = connection.prepareStatement("select * from user order by lastname");
+        // Maak SQL string
+        String sqlString = "select * from user ";
+        sqlString += getWhereClause();
+        sqlString += " order by lastname ";
+
+        PreparedStatement pstmt = connection.prepareStatement(sqlString);
 
         System.out.println("sql query " + pstmt.toString());
         ResultSet rs = pstmt.executeQuery();
@@ -217,7 +203,7 @@ public class UserController extends SearchMaintenanceController implements Initi
                     rs.getInt("rol"),
                     rs.getString("password"));
             list.add(user);
-     
+
         }
         return list;
 
@@ -235,6 +221,18 @@ public class UserController extends SearchMaintenanceController implements Initi
         User user = new User();
         user.getNew();
         fillFields(user);
+        
+        // Deactivate buttons
+        deleteBut.setDisable(true);
+        logBut.setDisable(true);
+    }
+    
+    public void delete(ActionEvent event) {
+        activeUser.delete();
+        // Set new user
+        newItem(event);
+        // Refresh grid
+        fillGrid(event);
     }
 
     public void fillFields(User user) {
@@ -243,14 +241,42 @@ public class UserController extends SearchMaintenanceController implements Initi
             idField.setText("New");
         } else {
             idField.setText(String.valueOf(user.getId()));
+            // Activate buttons
+            deleteBut.setDisable(false);
+            logBut.setDisable(false);
+ 
         }
         firstnameField.setText(user.getFirstname());
         middlenameField.setText(user.getMiddlename());
         lastnameField.setText(user.getLastname());
         emailField.setText(user.getEmail());
-        rolField.setValue(user.getRol());
+        Rol rol = Rol.getRol(user.getRol());
+        rolField.setValue(rol.getDescription());
         passwordField.setText(user.getPassword());
 
     }
 
+    public String getWhereClause() {
+        String whereString = "";
+        // Check Rol
+        Rol sRol = Rol.getRol("" + rolSearch.getValue());
+        if (sRol != null) {
+            whereString += " rol = " + sRol.getId();
+        }
+        
+        if (!Utils.isEmpty(whereString)) {
+            whereString = " Where " +whereString;
+        }
+        return whereString;
+    }
+
+    public void fillGrid(ActionEvent event) {
+        try {
+            grid.setItems(getUsers());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
