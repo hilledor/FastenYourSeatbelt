@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.User;
+import utils.Utils;
 
 /**
  *
@@ -33,6 +34,10 @@ public abstract class SearchMaintenanceController extends  Application implement
     TableView<User> grid;
 
  
+    @FXML
+    TextField searchField;
+
+    
     public void doGridSelect(TableRow row) {}
 
     
@@ -60,11 +65,35 @@ public abstract class SearchMaintenanceController extends  Application implement
     }
 
     
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String[] getSearchStrings(){
+        if (Utils.isEmpty(searchField.getText())){
+            return new String[0];
+        }
+        String[] retString = searchField.getText().split(" ");
+        return retString;
     }
-
     
+    public int[] getSearchInts(){
+        String[] strings = searchField.getText().split(" ");
+        String newIntString = "";
+        for (int i = 0 ; i < strings.length; i++){
+            try {
+                int isInt = Integer.parseInt(strings[i]);
+                newIntString  = Utils.glue(newIntString, ""+isInt, " ");
+            } catch (NumberFormatException e) {
+            }
+        }
+        if (Utils.isEmpty(newIntString)){
+            return new int[0];
+        }
+        String[] sInts = newIntString.split(" ");
+ 
+        System.out.println("sInts "+ sInts.length);
+        int[] ints = new int[sInts.length];
+        for (int i = 0 ; i < sInts.length; i++){
+             ints[i] = Integer.parseInt(sInts[i]);
+        } 
+        return ints;
+    }
 
 }

@@ -10,12 +10,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.Utils;
@@ -43,7 +45,8 @@ public abstract class DataEntity implements Tabel {
     public static Connection getConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "root");
+            //Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "root");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.1.13/fys2", "pfw", "pfw");
             return conn;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,14 +94,30 @@ public abstract class DataEntity implements Tabel {
                     + " where " + idField.getName() + " = " + idField.getLong(this));
             System.out.println("sql query " + pstmt.toString());
             ResultSet rs = pstmt.executeQuery();
-            if (!rs.next()){
+            if (!rs.next()) {
                 getNew();
             }
-            // Laad velden via annotatie
-            Class cls = getClass();
-            for (Field field : cls.getDeclaredFields()) {
-                for (Annotation anno : field.getAnnotations()) {
-                    if (anno instanceof Column) {
+
+            rsToEntity(rs);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void rsToEntity(ResultSet rs) {
+        // Laad velden via annotatie
+        Field idField = getIdField();
+        Class cls = getClass();
+        for (Field field : cls.getDeclaredFields()) {
+            for (Annotation anno : field.getAnnotations()) {
+                if (anno instanceof Column) {
+                    try {
                         Column col = (Column) anno;
                         DataType dt = col.dataType();
                         switch (dt) {
@@ -117,18 +136,16 @@ public abstract class DataEntity implements Tabel {
                                 field.set(this, myDate.getTime());
                                 break;
                         }
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void getNew() {
@@ -179,56 +196,54 @@ public abstract class DataEntity implements Tabel {
         // throw RuntimeException("No ID Field");
         return null;
     }
-    
-    
-    public void save(){
+
+    public void save() {
         try {
-            
+
             Connection conn = getConnection();
             Statement statement = conn.createStatement();
             Field idField = getIdField();
-            PreparedStatement pstmt ;
-  
+            PreparedStatement pstmt;
+
             String updateString = "";  // Make update String
             String insertField = "";  // Make insert fields String
             String insertQuestionMark = "";  // Make insert Questionmark String
-           
-            
+
             // Laad velden via annotatie
             // Eerst veld specifieke 
             Class cls = getClass();
             for (Field field : cls.getDeclaredFields()) {
                 for (Annotation anno : field.getAnnotations()) {
                     if (anno instanceof Column) {
-                         Column col = (Column) anno;
+                        Column col = (Column) anno;
                         DataType dt = col.dataType();
                         switch (dt) {
                             case ID:
-                               
+
                                 break;
                             default:
-                                updateString = Utils.glue(updateString , field.getName()+" = ? "," , ");
-                                insertField  = Utils.glue(insertField , field.getName()," , ");
-                                insertQuestionMark= Utils.glue(insertQuestionMark , " ? ",",");
+                                updateString = Utils.glue(updateString, field.getName() + " = ? ", " , ");
+                                insertField = Utils.glue(insertField, field.getName(), " , ");
+                                insertQuestionMark = Utils.glue(insertQuestionMark, " ? ", ",");
                         }
                     }
                 }
             }
 
             int key = idField.getInt(this);
-            if (key == -1){         // Insert
+            if (key == -1) {         // Insert
                 pstmt = conn.prepareStatement("insert into " + getTable()
-                    + " ( " + insertField + " ) values ( " + insertQuestionMark +" )");
+                        + " ( " + insertField + " ) values ( " + insertQuestionMark + " )");
             } else {
                 pstmt = conn.prepareStatement("update " + getTable()
-                    +" set " + updateString +" where " + idField.getName() + " = " + idField.getLong(this));
+                        + " set " + updateString + " where " + idField.getName() + " = " + idField.getLong(this));
             }
-       
+
             System.out.println("sql query 1 " + pstmt.toString());
             // Laad velden via annotatie
             // Eerst veld specifieke 
             int counter = 0;
-            
+
             for (Field field : cls.getDeclaredFields()) {
                 for (Annotation anno : field.getAnnotations()) {
                     if (anno instanceof Column) {
@@ -247,7 +262,7 @@ public abstract class DataEntity implements Tabel {
                                 break;
                             case DATETIME:
                                 Calendar cal = (Calendar) field.get(this);
-                                
+
                                 pstmt.setLong(counter, cal.getTimeInMillis());
                                 break;
                         }
@@ -256,9 +271,7 @@ public abstract class DataEntity implements Tabel {
             }
             System.out.println("sql query " + pstmt.toString());
             pstmt.executeUpdate();
-    
 
-            
         } catch (SQLException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
@@ -266,6 +279,48 @@ public abstract class DataEntity implements Tabel {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
+    
+    public boolean isNew(){
+        try {
+            Field idField = getIdField();
+            if (idField.getLong(this) > 0){
+                return false;
+            }
+            
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
+    
+    
+    
+    public static int addParamsToStatement(PreparedStatement ps, List<Object> objs) throws SQLException {
+        int i = 0;
+        System.out.println("Objecten : "+objs.size());
+        for (Object obj : objs) {
+            i += 1;
+            System.out.println(""+obj+" "+i);
+            if (obj instanceof Date) {
+                Calendar cal = (Calendar) obj;
+                ps.setLong(i, cal.getTimeInMillis());
+            } else if (obj instanceof Integer) {
+                ps.setInt(i, (Integer) obj);
+            } else if (obj instanceof Long) {
+                ps.setLong(i, (Long) obj);
+            } else if (obj instanceof Double) {
+                ps.setDouble(i, (Double) obj);
+            } else if (obj instanceof Float) {
+                ps.setFloat(i, (Float) obj);
+            } else {
+                ps.setString(i, (String) obj);
+            }
+        }
+        return i;
+    }
+
 }

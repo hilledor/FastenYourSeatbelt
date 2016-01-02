@@ -5,15 +5,18 @@
  */
 package controller;
 
-import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+import model.User;
 
 /**
  *
- * @author jdor
+ * @author jandorresteijn
+ * 
  */
-interface SearchMaintenanceInterface {
-   
-    public void newItem(ActionEvent event) ;
+public class FouteStatic {
+   // Lekker fout
     
-
+    public static Stage primaryStage;
+    public static User  theUser;
+     
 }

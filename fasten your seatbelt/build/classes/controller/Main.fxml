@@ -7,29 +7,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="580.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<AnchorPane id="AnchorPane" prefHeight="589.0" prefWidth="783.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
   <children>
-      <Pane fx:id="loginPane" prefHeight="580.0" prefWidth="660.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TextField fx:id="user" layoutX="236.0" layoutY="208.0" promptText="Username" />
-            <TextField fx:id="password" layoutX="236.0" layoutY="246.0" promptText="Password" />
-            <Label layoutX="195.0" layoutY="164.0" text="Give Username and Password">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Button fx:id="login" layoutX="236.0" layoutY="290.0" mnemonicParsing="false" onAction="#onLogin" prefHeight="27.0" prefWidth="167.0" text="Login" />
-         </children>
-      </Pane>
-      <SplitPane fx:id="splitPane" prefHeight="594.0" prefWidth="729.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane fx:id="splitPane" dividerPositions="0.24012158054711247" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="594.0" prefWidth="729.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="578.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="578.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                <children>
-              <Button fx:id="users" layoutX="18.0" layoutY="29.0" mnemonicParsing="false" onAction="#onUsers" prefWidth="108.0" text="Users" />
+              <Button fx:id="users" layoutX="22.0" layoutY="29.0" mnemonicParsing="false" onAction="#onUsers" prefWidth="108.0" text="Users" />
                </children>
             </AnchorPane>
+            <AnchorPane fx:id="mainPain" prefHeight="595.0" prefWidth="577.0" />
         </items>
       </SplitPane>
-      <AnchorPane fx:id="mainPain" prefHeight="580.0" prefWidth="660.0" />
   </children>
 </AnchorPane>

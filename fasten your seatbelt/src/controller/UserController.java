@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -181,16 +183,20 @@ public class UserController extends SearchMaintenanceController implements Initi
     private ObservableList<User> getUsers() throws ClassNotFoundException, SQLException {
 
         ObservableList<User> list = FXCollections.observableArrayList();
-        Connection connection = DataEntity.getConnection();
-        Statement statement = connection.createStatement();
-
+        Connection conn = DataEntity.getConnection();
+    
+        // Definer paramsList
+        List<Object> params = new ArrayList<Object>();
+       
         // Maak SQL string
-        String sqlString = "select * from user ";
-        sqlString += getWhereClause();
-        sqlString += " order by lastname ";
-
-        PreparedStatement pstmt = connection.prepareStatement(sqlString);
-
+        String sqlString = "SELECT * FROM user ";
+        sqlString += getWhereClause(params);
+        sqlString += " ORDER BY lastname ";
+        System.out.println("sqlString = "+ sqlString);
+        
+        PreparedStatement pstmt = conn.prepareStatement(sqlString);
+        DataEntity.addParamsToStatement(pstmt, params);
+        
         System.out.println("sql query " + pstmt.toString());
         ResultSet rs = pstmt.executeQuery();
 
@@ -256,16 +262,43 @@ public class UserController extends SearchMaintenanceController implements Initi
 
     }
 
-    public String getWhereClause() {
+    public String getWhereClause( List<Object> params) {
         String whereString = "";
+        
         // Check Rol
         Rol sRol = Rol.getRol("" + rolSearch.getValue());
         if (sRol != null) {
-            whereString += " rol = " + sRol.getId();
+            whereString += " rol = ? " ;
+            params.add(sRol.getId());
         }
         
+        // Beetje fulltext
+        String[] searchStrs = getSearchStrings();
+        String whereLikes = "";
+        for (int i = 0 ; i <  searchStrs.length ; i++){
+            whereLikes = Utils.glue(whereLikes, "firstname like ?" , " OR ");
+            params.add("%"+searchStrs[i]+"%");
+            whereLikes = Utils.glue(whereLikes, "lastname like ?" , " OR ");
+            params.add("%"+searchStrs[i]+"%");
+            whereLikes = Utils.glue(whereLikes, "email like ?" , " OR ");
+            params.add("%"+searchStrs[i]+"%");
+        }
+       
+        
+        // Check ook ints
+        int[] searchInts = getSearchInts();
+        for (int i = 0 ; i <  searchInts.length ; i++){
+             whereLikes = Utils.glue(whereLikes, "id like ?" , " OR ");
+             params.add(searchInts[i]);
+        }
+        
+        if (!Utils.isEmpty(whereLikes)){
+            whereLikes = " ( "+ whereLikes+" ) ";          
+        }
+        whereString = Utils.glue(whereString, whereLikes, " AND ");
+        
         if (!Utils.isEmpty(whereString)) {
-            whereString = " Where " +whereString;
+            whereString = " WHERE " +whereString;
         }
         return whereString;
     }

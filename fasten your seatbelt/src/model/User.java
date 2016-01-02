@@ -2,6 +2,8 @@ package model;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -9,56 +11,51 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class User extends DataEntity implements Tabel {
 
- 
-    	public enum Rol  {
-		
-		ADMIN(1, "Admin"),
-		MANAGER(2, "Manager"),
-		EMPLOYEE(3, "Employee");
-		
-		private final int id;
-		
-		private final String description;
-		
-		Rol(int id, String description) {
-			this.id = id;
-			this.description = description;
-		}
-		
-		
-		public int getId() {
-			return id;
-		}
-		
-		public String getDescription() {
-			return description;
-		}
-	
-		public static Rol getRol(String description) {
-                    System.out.println("description "+description);
-			Rol[] rols = values();
-			for (Rol rol : rols) {
-				if(rol.description.equals(description)){
-					return rol;
-				}
-			}
-			return null;
-		}
-                
-                public static Rol getRol(int id) {
-			Rol[] rols = values();
-			for (Rol rol : rols) {
-				if(rol.id == id){
-					return rol;
-				}
-			}
-			return getRol(1);
-		}
-	}
+    public enum Rol {
 
-    
-    
-    
+        ADMIN(1, "Admin"),
+        MANAGER(2, "Manager"),
+        EMPLOYEE(3, "Employee");
+
+        private final int id;
+
+        private final String description;
+
+        Rol(int id, String description) {
+            this.id = id;
+            this.description = description;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public static Rol getRol(String description) {
+            System.out.println("description " + description);
+            Rol[] rols = values();
+            for (Rol rol : rols) {
+                if (rol.description.equals(description)) {
+                    return rol;
+                }
+            }
+            return null;
+        }
+
+        public static Rol getRol(int id) {
+            Rol[] rols = values();
+            for (Rol rol : rols) {
+                if (rol.id == id) {
+                    return rol;
+                }
+            }
+            return getRol(1);
+        }
+    }
+
     @Column(dataType = DataType.ID)
     public int id;
     @Column(dataType = DataType.STRING)
@@ -75,9 +72,19 @@ public class User extends DataEntity implements Tabel {
     public String password;
     @Column(dataType = DataType.INT)
     public int inactive;
-    
-    
-    
+
+    public User(ResultSet rs) {
+        try {
+            getNew();
+            if (rs.next()) {
+                rsToEntity(rs);
+            }
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public User() {
 
     }
@@ -143,14 +150,11 @@ public class User extends DataEntity implements Tabel {
     public void setRol(int rol) {
         this.rol = rol;
     }
-    
-    
-    
+
     public int getInactive() {
         return inactive;
     }
 
-    
     public void setInactive(int inactive) {
         this.inactive = inactive;
     }
@@ -190,34 +194,33 @@ public class User extends DataEntity implements Tabel {
             Class type = field.getType();
             String name = field.getName();
             Annotation[] annotations = field.getDeclaredAnnotations();
-            System.out.println("Naam "+name +" type =" +type +"  ");
-            for (Annotation anno : field.getAnnotations()){
+            System.out.println("Naam " + name + " type =" + type + "  ");
+            for (Annotation anno : field.getAnnotations()) {
                 if (anno instanceof Column) {
                     Column col = (Column) anno;
-                    System.out.println("col "+col.dataType());
-                    if (col.dataType().equals(DataType.STRING)){
+                    System.out.println("col " + col.dataType());
+                    if (col.dataType().equals(DataType.STRING)) {
                         try {
-                            if (field.get(user) != null ){
+                            if (field.get(user) != null) {
                                 String val = field.get(user).toString();
-                                
-                                System.out.println("value "+ val);
+
+                                System.out.println("value " + val);
                             }
                         } catch (IllegalAccessException ex) {
                             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
-                
+
             }
         }
     }
 
-    
     public void getNew() {
         super.getNew();
         setRol(3);
     }
-    
+
     @Override
     public String getTable() {
         return "user";
