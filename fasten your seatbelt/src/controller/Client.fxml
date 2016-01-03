@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="552.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
+  <children>
+    <SplitPane dividerPositions="0.5" focusTraversable="true" orientation="VERTICAL" prefHeight="552.0" prefWidth="762.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-153.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="294.0" prefWidth="609.0" snapToPixel="true">
+          <children>
+            <TableView id="tableID" fx:id="grid" editable="false" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="80.0">
+              <columns>
+                <TableColumn fx:id="firstnameCol" maxWidth="5000.0" minWidth="10.0" prefWidth="150.0" text="First name" />
+                <TableColumn fx:id="middlenameCol" maxWidth="5000.0" minWidth="10.0" prefWidth="63.0" text="Middle name" />
+                <TableColumn fx:id="lastnameCol" maxWidth="5000.0" minWidth="10.0" prefWidth="231.0" sortable="false" text="Last name" />
+                <TableColumn fx:id="emailCol" maxWidth="5000.0" minWidth="10.0" prefWidth="200.0" text="Email" />
+                <TableColumn fx:id="phonenumberCol" prefWidth="99.0" text="phonenumber" />
+                <TableColumn fx:id="streetCol" maxWidth="5000.0" minWidth="10.0" prefWidth="144.0" text="street" />
+                        <TableColumn fx:id="streetnumberCol" maxWidth="5000.0" minWidth="10.0" prefWidth="118.0" text="streetnumber" />
+                        <TableColumn fx:id="zipcodeCol" maxWidth="5000.0" minWidth="10.0" prefWidth="89.0" text="Zipcode" />
+                        <TableColumn fx:id="cityCol" maxWidth="5000.0" minWidth="10.0" prefWidth="103.0" text="City" />
+                        <TableColumn fx:id="countryCol" maxWidth="5000.0" minWidth="10.0" prefWidth="212.0" text="Country" />
+              </columns>
+            </TableView>
+            <TextField fx:id="searchField" layoutX="14.0" layoutY="28.0" prefHeight="27.0" prefWidth="224.0" promptText="Search first / last name" />
+            <Button fx:id="newBut" layoutY="27.0" mnemonicParsing="false" onAction="#newItem" prefWidth="63.0" text="New" textAlignment="RIGHT" AnchorPane.rightAnchor="16.0" />
+            <Button fx:id="searchBut" layoutX="397.0" layoutY="28.0" mnemonicParsing="false" onAction="#fillGrid" prefWidth="75.0" text="Search" />
+          </children>
+        </AnchorPane>
+        <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="249.0" prefWidth="693.0">
+          <children>
+            <Label layoutX="23.0" layoutY="15.0" prefWidth="75.0" text="Id" />
+            <Label layoutX="26.0" layoutY="45.0" prefWidth="90.0" text="Name" />
+            <Label layoutX="26.0" layoutY="74.0" text="Middle name" />
+            <Label layoutX="27.0" layoutY="134.0" text="Email" />
+            <Label layoutX="29.0" layoutY="168.0" text="Phonenumber" textAlignment="JUSTIFY" />
+            <Label layoutX="31.0" layoutY="198.0" text="Street" />
+            <TextField fx:id="idField" disable="true" layoutX="143.0" layoutY="10.0" prefWidth="200.0" />
+            <TextField fx:id="firstnameField" layoutX="143.0" layoutY="40.0" prefWidth="200.0" promptText="Firstname" />
+            <TextField fx:id="middlenameField" layoutX="143.0" layoutY="69.0" prefWidth="200.0" />
+            <TextField fx:id="lastnameField" layoutX="143.0" layoutY="98.0" prefWidth="200.0" />
+            <TextField fx:id="emailField" layoutX="143.0" layoutY="129.0" prefWidth="200.0" />
+            <PasswordField fx:id="streetField" layoutX="143.0" layoutY="193.0" prefWidth="200.0" />
+            <Button fx:id="saveBut" layoutX="479.0" layoutY="201.0" mnemonicParsing="false" prefWidth="65.0" text="Save" textAlignment="RIGHT" AnchorPane.rightAnchor="216.0" />
+            <Button id="deleteBut" fx:id="deleteBut" layoutX="580.0" layoutY="201.0" mnemonicParsing="false" onAction="#delete" prefWidth="65.0" text="Delete" textAlignment="RIGHT" AnchorPane.rightAnchor="115.0" />
+            <Label layoutX="27.0" layoutY="103.0" text="Last name" />
+            <Button id="deleteBut" fx:id="logBut" layoutY="201.0" mnemonicParsing="false" onAction="#showLog" prefWidth="65.0" text="Log" textAlignment="RIGHT" AnchorPane.rightAnchor="16.0" />
+                  <PasswordField fx:id="phonenumberField" layoutX="143.0" layoutY="163.0" prefWidth="200.0" />
+                  <TextField fx:id="streetnumberField" layoutX="468.0" layoutY="40.0" prefWidth="200.0" />
+                  <TextField fx:id="zipcodeField" layoutX="468.0" layoutY="69.0" prefWidth="200.0" />
+                  <TextField fx:id="cityField" layoutX="468.0" layoutY="98.0" prefWidth="200.0" />
+                  <Label layoutX="361.0" layoutY="45.0" text="Streetnumber" />
+                  <Label layoutX="361.0" layoutY="74.0" text="zipcode" />
+                  <Label layoutX="361.0" layoutY="103.0" text="City" />
+                  <Label layoutX="361.0" layoutY="134.0" text="Country" />
+                  <TextField fx:id="countryField" layoutX="468.0" layoutY="129.0" prefWidth="200.0" />
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

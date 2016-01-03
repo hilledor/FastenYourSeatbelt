@@ -14,6 +14,7 @@
           <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="578.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                <children>
               <Button fx:id="users" layoutX="22.0" layoutY="29.0" mnemonicParsing="false" onAction="#onUsers" prefWidth="108.0" text="Users" />
+                  <Button fx:id="clients" layoutX="22.0" layoutY="79.0" mnemonicParsing="false" onAction="#onClients" prefWidth="108.0" text="clients" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="mainPain" prefHeight="595.0" prefWidth="577.0" />

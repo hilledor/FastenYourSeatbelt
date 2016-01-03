@@ -33,6 +33,9 @@ public class MainController implements Initializable {
     Button users;
 
     @FXML
+    Button clients;
+
+    @FXML
     Pane mainPain;
 
     @FXML
@@ -55,6 +58,25 @@ public class MainController implements Initializable {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+        
+
+    public void onClients(ActionEvent event) {
+        try {
+            AnchorPane clientScr = (AnchorPane) FXMLLoader.load(LogController.class.getResource("Client.fxml"));
+            //Opruimnen oude objecten weet niet of dit de manier is
+            mainPain.getChildren().removeAll(mainPain.getChildren());
+            mainPain.getChildren().clear();
+            mainPain.getChildren().setAll(clientScr);
+            FouteStatic.primaryStage.setTitle("FYS Clients");
+            AnchorPane.setTopAnchor(clientScr, 0.0);
+            AnchorPane.setLeftAnchor(clientScr, 0.0);
+            AnchorPane.setRightAnchor(clientScr, 0.0);
+            AnchorPane.setBottomAnchor(clientScr, 0.0);
+
+        } catch (IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Initializes the controller class.
@@ -62,5 +84,6 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
-
 }
+
+

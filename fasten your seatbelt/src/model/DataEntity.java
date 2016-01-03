@@ -45,8 +45,8 @@ public abstract class DataEntity implements Tabel {
     public static Connection getConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            //Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "root");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.1.13/fys2", "pfw", "pfw");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/fys2", "root", "janjan12");
+            //Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.1.13/fys2", "pfw", "pfw");
             return conn;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);

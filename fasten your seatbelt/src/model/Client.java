@@ -9,8 +9,9 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class User extends DataEntity implements Tabel {
+public class Client extends DataEntity implements Tabel {
 
+    /*
     public enum Rol {
 
         ADMIN(1, "Admin"),
@@ -55,7 +56,8 @@ public class User extends DataEntity implements Tabel {
             return getRol(1);
         }
     }
-
+    */
+    
     @Column(dataType = DataType.ID)
     public int id;
     @Column(dataType = DataType.STRING)
@@ -66,14 +68,20 @@ public class User extends DataEntity implements Tabel {
     public String lastname;
     @Column(dataType = DataType.STRING)
     public String email;
-    @Column(dataType = DataType.INT)
-    public int rol;
     @Column(dataType = DataType.STRING)
-    public String password;
-    @Column(dataType = DataType.INT)
-    public int inactive;
+    public String phonenumber;
+    @Column(dataType = DataType.STRING)
+    public String street;
+    @Column(dataType = DataType.STRING)
+    public String streetnumber;
+    @Column(dataType = DataType.STRING)
+    public String zipcode;
+    @Column(dataType = DataType.STRING)
+    public String city;
+    @Column(dataType = DataType.STRING)
+    public String country;
 
-    public User(ResultSet rs) {
+    public Client(ResultSet rs) {
         try {
             getNew();
             if (rs.next()) {
@@ -81,23 +89,29 @@ public class User extends DataEntity implements Tabel {
             }
            
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public User() {
+    public Client() {
 
     }
 
-    public User(int id, String firstname, String middlename, String lastname, String email, int rol, String password) {
+    public Client(int id, String firstname, String middlename, String lastname, String email, String phonenumber, String street, String streetnumber, String zipcode, String city, String country) {
         this.id = id;
         this.firstname = firstname;
         this.middlename = middlename;
         this.lastname = lastname;
         this.email = email;
-        this.rol = rol;
-        this.password = password;
+        this.phonenumber = phonenumber;
+        this.street = street;
+        this.streetnumber = streetnumber;
+        this.zipcode = zipcode;
+        this.city = city;
+        this.country = country;
     }
+
+    
 
     public int getId() {
         return id;
@@ -138,34 +152,54 @@ public class User extends DataEntity implements Tabel {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public int getRol() {
-        return rol;
+    public String getPhonenumber() {
+        return phonenumber;
     }
 
-    public String getRolDisplay() {
-        return Rol.getRol(getRol()).getDescription();
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
-    public void setRol(int rol) {
-        this.rol = rol;
+    public String getStreet() {
+        return street;
     }
 
-    public int getInactive() {
-        return inactive;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public void setInactive(int inactive) {
-        this.inactive = inactive;
+    public String getStreetnumber() {
+        return streetnumber;
     }
 
-    public String getPassword() {
-        return password;
+    public void setStreetnumber(String streetnumber) {
+        this.streetnumber = streetnumber;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getZipcode() {
+        return zipcode;
     }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
 
     /*
      private final SimpleIntegerProperty id;
@@ -185,10 +219,10 @@ public class User extends DataEntity implements Tabel {
      }
      */
     public static void main(String[] arg) throws IllegalArgumentException {
-        User user = new User();
-        user.setFirstname("jan");
-        user.setLastname("Dorr");
-        Class cls = user.getClass();
+        Client client = new Client();
+        client.setFirstname("jan");
+        client.setLastname("Dorr");
+        Class cls = client.getClass();
         System.out.println("Check Colums");
         for (Field field : cls.getDeclaredFields()) {
             Class type = field.getType();
@@ -201,13 +235,13 @@ public class User extends DataEntity implements Tabel {
                     System.out.println("col " + col.dataType());
                     if (col.dataType().equals(DataType.STRING)) {
                         try {
-                            if (field.get(user) != null) {
-                                String val = field.get(user).toString();
+                            if (field.get(client) != null) {
+                                String val = field.get(client).toString();
 
                                 System.out.println("value " + val);
                             }
                         } catch (IllegalAccessException ex) {
-                            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
@@ -218,10 +252,11 @@ public class User extends DataEntity implements Tabel {
 
     public void getNew() {
         super.getNew();
-        setRol(3);
+
     }
 
+    @Override
     public String getTable() {
-        return "user";
+        return "client";
     }
 }
