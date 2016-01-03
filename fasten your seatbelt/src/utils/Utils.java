@@ -1,10 +1,6 @@
 package utils;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.List;
+import java.util.Collection;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -59,7 +55,7 @@ public class Utils {
     }
 
     public static String glue(String string1, String string2, String seperator) {
-        if (!Utils.isEmpty(string1)) {
+        if (!Utils.isEmpty(string1) && !Utils.isEmpty(string2)) {
             string1 += seperator;
         }
         string1 += string2;
@@ -75,6 +71,45 @@ public class Utils {
 
     }
 
-    
+    public static void assertNotNull(String msg, Object obj) {
+        if (obj == null) {
+            throw new IllegalStateException(msg);
+        }
+    }
+
+    public static String glue(Collection<String> list, String separator) {
+        boolean isFirst = true;
+        StringBuilder result = new StringBuilder();
+        for (String s : list) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                result.append(separator);
+            }
+            result.append(s);
+        }
+        return result.toString();
+    }
+
+    public static void glue(StringBuilder result, String separator,
+            Object... values) {
+        if (values == null) {
+            return;
+        }
+        boolean isFirst = true;
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] instanceof Object[]) {
+                throw new IllegalStateException("values[i] is een array");
+            }
+            if (values[i] != null) {
+                if (isFirst) {
+                    isFirst = false;
+                } else {
+                    result.append(separator);
+                }
+                result.append(values[i].toString());
+            }
+        }
+    }
 
 }

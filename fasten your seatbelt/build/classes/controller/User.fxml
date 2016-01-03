@@ -64,7 +64,7 @@
               </items>
             </ComboBox>
             <Label layoutX="25.0" layoutY="113.0" text="Last name" />
-            <Button id="deleteBut" fx:id="logBut" layoutY="201.0" mnemonicParsing="false" prefWidth="65.0" text="Log" textAlignment="RIGHT" AnchorPane.rightAnchor="16.0" />
+            <Button id="deleteBut" fx:id="logBut" layoutY="201.0" mnemonicParsing="false" onAction="#showLog" prefWidth="65.0" text="Log" textAlignment="RIGHT" AnchorPane.rightAnchor="16.0" />
           </children>
         </AnchorPane>
       </items>

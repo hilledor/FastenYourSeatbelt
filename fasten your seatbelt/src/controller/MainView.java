@@ -1,25 +1,16 @@
 package controller;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import model.DataEntity;
 import model.User;
-import utils.Utils;
 
 /**
  *
@@ -84,7 +75,7 @@ public class MainView extends Application {
 
         // if not records insert 3 users
         pstmt = connection.prepareStatement("INSERT into user (firstname, middlename, lastname, email, rol, password, inactive) values (?,?,?,?,?,?,?)");
-        pstmt.setString(1, "admin");
+        pstmt.setString(1, "hille");
         pstmt.setString(2, "van");
         pstmt.setString(3, "Dorresteijn");
         pstmt.setString(4, "hille@base.nl");
@@ -93,7 +84,11 @@ public class MainView extends Application {
         pstmt.setInt(7, 0);
         System.out.println("sql : " + pstmt.toString());
         pstmt.executeUpdate();
-
+        
+        User mainUser = LoginController.searchUser("hille@base.nl","admin");
+        FouteStatic.theUser = mainUser;
+        
+        
         //Kan ook via User
         User user = new User(-1, "Piet", "", "Puk", "piet@puk.nl", 3, "Pietje");
         user.save();

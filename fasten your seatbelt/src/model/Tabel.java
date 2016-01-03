@@ -10,5 +10,7 @@ package model;
  * @author jandorresteijn
  */
 interface Tabel {
+    
     String getTable();
+    void getNew();
 }

@@ -1,0 +1,24 @@
+TODO
+
+DataEntiteiten  en Controllers aanmaken:
+
+client
+foundbagage
+missingbagage
+
+Maak eerst de DataEntiteit in models
+Deze testen door in MainView.fillDataBaseIfEmpty de lege database te vullen
+
+Let op! bij missingbagage hebt je te maken met constraint. (voer geldig client nummer in)
+
+
+Bij maken van de controlelers copieer van de User.fxml
+
+Uitdagingen bij de schermen - controllers
+- Invoeren datums
+- Invoeren ralatie naar andere table (missingbagage >- client)
+
+
+Extra todo
+- Het log houdt nu insert en updates bij nog geen delete
+- Validaties maken op de dataentities ( is nummeric is lengte niet te lang etc. )

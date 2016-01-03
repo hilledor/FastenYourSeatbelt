@@ -40,7 +40,7 @@ public class MainController implements Initializable {
 
     public void onUsers(ActionEvent event) {
         try {
-            AnchorPane userScr = (AnchorPane) FXMLLoader.load(UserController.class.getResource("User.fxml"));
+            AnchorPane userScr = (AnchorPane) FXMLLoader.load(LogController.class.getResource("User.fxml"));
             //Opruimnen oude objecten weet niet of dit de manier is
             mainPain.getChildren().removeAll(mainPain.getChildren());
             mainPain.getChildren().clear();

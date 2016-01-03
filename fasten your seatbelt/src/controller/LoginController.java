@@ -80,6 +80,7 @@ public class LoginController implements Initializable {
             FouteStatic.primaryStage.close();
             FouteStatic.primaryStage.setScene(scene);
             FouteStatic.primaryStage.show();
+            FouteStatic.theUser = user;
             // 
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
@@ -97,7 +98,7 @@ public class LoginController implements Initializable {
     }    
 
     
-    public User searchUser(String email, String passWord){
+    public static User searchUser(String email, String passWord){
         User user = null;
         try {
             // Check table user via select

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="552.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LogController">
+  <children>
+    <SplitPane dividerPositions="0.5236363636363637" focusTraversable="true" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="294.0" prefWidth="609.0" snapToPixel="true">
+          <children>
+            <TableView id="tableID" fx:id="grid" editable="false" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="80.0">
+              <columns>
+                <TableColumn fx:id="logdateCol" maxWidth="5000.0" minWidth="10.0" prefWidth="150.0" text="Date" />
+                <TableColumn fx:id="userDisplayCol" maxWidth="5000.0" minWidth="10.0" prefWidth="226.0" text="User" />
+                <TableColumn fx:id="updatetypeCol" maxWidth="5000.0" minWidth="10.0" prefWidth="144.0" sortable="false" text="Type" />
+                <TableColumn fx:id="memoCol" maxWidth="5000.0" minWidth="10.0" prefWidth="400.0" text="Memo" />
+              </columns>
+            </TableView>
+            <TextField fx:id="searchField" layoutX="47.0" layoutY="28.0" prefHeight="27.0" prefWidth="174.0" promptText="Search id" />
+            <Button fx:id="newBut" layoutY="27.0" mnemonicParsing="false" onAction="#newItem" prefWidth="63.0" text="New" textAlignment="RIGHT" visible="false" AnchorPane.rightAnchor="16.0" />
+            <Button fx:id="searchBut" layoutX="397.0" layoutY="28.0" mnemonicParsing="false" onAction="#fillGrid" prefWidth="75.0" text="Search" />
+                  <ComboBox fx:id="tablenameSearch" layoutX="255.0" layoutY="28.0" prefHeight="27.0" prefWidth="128.0" promptText="Table Filter" visibleRowCount="3">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="user" />
+                            <String fx:value="client" />
+                           <String fx:value="foundbagage" />
+                           <String fx:value="missingbagage" />
+                        </FXCollections>
+                     </items>
+                  </ComboBox>
+                  <Label layoutX="16.0" layoutY="31.0" text="Id">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+          </children>
+        </AnchorPane>
+        <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="612.0">
+          <children>
+            <Button fx:id="saveBut" layoutY="34.0" mnemonicParsing="false" prefWidth="65.0" text="Save" textAlignment="RIGHT" visible="false" AnchorPane.rightAnchor="16.0" />
+            <Button id="deleteBut" fx:id="deleteBut" layoutY="77.0" mnemonicParsing="false" onAction="#delete" prefWidth="65.0" text="Delete" textAlignment="RIGHT" visible="false" AnchorPane.rightAnchor="16.0" />
+            <Button id="deleteBut" fx:id="logBut" layoutY="201.0" mnemonicParsing="false" prefWidth="65.0" text="Log" textAlignment="RIGHT" visible="false" AnchorPane.rightAnchor="16.0" />
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

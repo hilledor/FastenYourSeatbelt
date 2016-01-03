@@ -5,6 +5,7 @@
  */
 package model;
 
+import controller.FouteStatic;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -29,7 +30,6 @@ import utils.Utils;
 public abstract class DataEntity implements Tabel {
 
     public enum DataType {
-
         ID,
         INT,
         STRING,
@@ -197,12 +197,29 @@ public abstract class DataEntity implements Tabel {
         return null;
     }
 
-    public void save() {
+    public <T extends DataEntity> void save() {
+        T old = null;
         try {
-
+            // For log data
+            // Make new object
+            System.out.println("class name " + getClass().getName());
+            old = (T) Class.forName(getClass().getName()).newInstance();
+            Field idField = getIdField();
+            int id = idField.getInt(this);           // Check if it is a new record
+            if (id == -1){
+                // Zet empty values
+                old.getNew();
+            } else {
+                Field oldIdField = old.getIdField();
+                oldIdField.set(old, id);
+                old.load();
+            }            
+            // Old record active
+            
+            
             Connection conn = getConnection();
             Statement statement = conn.createStatement();
-            Field idField = getIdField();
+                
             PreparedStatement pstmt;
 
             String updateString = "";  // Make update String
@@ -233,7 +250,7 @@ public abstract class DataEntity implements Tabel {
             int key = idField.getInt(this);
             if (key == -1) {         // Insert
                 pstmt = conn.prepareStatement("insert into " + getTable()
-                        + " ( " + insertField + " ) values ( " + insertQuestionMark + " )");
+                        + " ( " + insertField + " ) values ( " + insertQuestionMark + " )" , Statement.RETURN_GENERATED_KEYS);
             } else {
                 pstmt = conn.prepareStatement("update " + getTable()
                         + " set " + updateString + " where " + idField.getName() + " = " + idField.getLong(this));
@@ -263,7 +280,7 @@ public abstract class DataEntity implements Tabel {
                             case DATETIME:
                                 Calendar cal = (Calendar) field.get(this);
 
-                                pstmt.setLong(counter, cal.getTimeInMillis());
+                                pstmt.setTimestamp(counter, new java.sql.Timestamp(cal.getTimeInMillis()));
                                 break;
                         }
                     }
@@ -271,6 +288,13 @@ public abstract class DataEntity implements Tabel {
             }
             System.out.println("sql query " + pstmt.toString());
             pstmt.executeUpdate();
+            
+            // Set autoincremented key back in entity
+            if (key == -1) {         
+                ResultSet rs = pstmt.getGeneratedKeys();
+                rs.next();
+                idField.set(this, rs.getInt(1));
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
@@ -278,8 +302,17 @@ public abstract class DataEntity implements Tabel {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(DataEntity.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        // Log dif old and new
+        if ( FouteStatic.theUser != null && !getTable().equals("log")){
+                
+            Log.logData(old, this);
+        }
+ 
     }
     
     public boolean isNew(){

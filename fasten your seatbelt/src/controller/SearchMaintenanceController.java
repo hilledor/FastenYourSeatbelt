@@ -5,19 +5,26 @@
  */
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.User;
@@ -94,6 +101,26 @@ public abstract class SearchMaintenanceController extends  Application implement
              ints[i] = Integer.parseInt(sInts[i]);
         } 
         return ints;
+    }
+
+    
+    public void showLog(String table, int id) {
+        try {
+            Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(MainView.class.getResource("Log.fxml"));
+   //         loader.setController(new LogController());
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            Scene scene = new Scene(page, 700, 500);
+            stage.setScene(scene);
+            stage.setTitle("Log");
+            LogController lc = loader.getController();
+            lc.searchTableNameAndId( table, id );
+            stage.show();
+ 
+        } catch (IOException ex) {
+            Logger.getLogger(SearchMaintenanceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
