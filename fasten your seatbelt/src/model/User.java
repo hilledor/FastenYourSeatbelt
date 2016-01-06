@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import utils.Utils;
 
 public class User extends DataEntity implements Tabel {
 
@@ -223,5 +224,12 @@ public class User extends DataEntity implements Tabel {
 
     public String getTable() {
         return "user";
+    }
+    
+    public String toString(){
+        String name = getFirstname();
+        name = Utils.glue(name, getMiddlename(), " ");
+        name = Utils.glue(name, getLastname(), " ");
+        return name;
     }
 }
